@@ -1,4 +1,4 @@
-net: "/media/shehab/D_DRIVE/Codes/CodeCollection/Caffe/caffe-master_18_APR_2016/examples/motionFeatureFusion/Demo/basemodel.prototxt"
+net: "examples/motionFeatureFusion/Demo/basemodel.prototxt"
 test_iter: 470
 # Carry out testing every 500 training iterations.
 test_interval: 200
@@ -18,7 +18,7 @@ display: 100
 max_iter: 1600
 # snapshot intermediate results
 snapshot: 0
-snapshot_prefix: "/media/shehab/D_DRIVE/Codes/CodeCollection/Caffe/caffe-master_18_APR_2016/examples/motionFeatureFusion/Demo/snapshot/snap_"
+snapshot_prefix: "examples/motionFeatureFusion/Demo/snapshot/snap_"
 
 # solver mode: CPU or GPU
 solver_mode: GPU
