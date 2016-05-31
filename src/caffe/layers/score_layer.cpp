@@ -28,7 +28,7 @@ void ScoreLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
   CHECK_EQ(bottom[0]->num(), bottom[1]->num())
       << "The data and label should have the same number.";
-  CHECK_EQ(bottom[1]->channels(), bottom[0]->channels());
+  //CHECK_EQ(bottom[1]->channels(), bottom[0]->channels());
   CHECK_EQ(bottom[1]->height(), 1);
   CHECK_EQ(bottom[1]->width(), 1);
   top[0]->Reshape(1, 1, 1, 1);
@@ -39,18 +39,23 @@ void ScoreLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
   const Dtype* bottom_data = bottom[0]->cpu_data();
   const Dtype* bottom_label = bottom[1]->cpu_data();
-  int num = bottom[0]->num();
-  int dim = bottom[0]->count() / bottom[0]->num();
-   if(this->layer_param_.has_score_param()){
+  int numdata = bottom[0]->num();
+  int dimdata=bottom[0]->count() / numdata;
+  int numlabel=bottom[1]->num();
+  int dimlabel = bottom[1]->count() / bottom[1]->num();
+  int dimodd=dimdata/dimlabel;
+  //printf("dimdata=%d, dimlabel=%d,dimodd=%d\n",dimdata, dimlabel, dimodd);
+  if(this->layer_param_.has_score_param()){
      //std::ofstream outfile(file_name, ios::app);
-    FILE* fout = fopen(file_name, "a");
+	 FILE* fout = fopen(file_name, "a");
      //std::cout << writefile_ <<endl;
-     for (int i = 0; i < num; ++i) {
+     for (int i = 0; i < numlabel; ++i) {
     // Top-k accuracy
-       for (int j = 0; j < dim; ++j) {
-        fprintf(fout, "%g ",bottom_data[i*dim+j]);
-
-        fprintf(fout, "%d ",(int)(bottom_label[i*dim+j]));
+    	 for (int j = 0; j < dimlabel; ++j) {
+    		 for(int k=0; k<dimodd; k++){
+    			 fprintf(fout, "%g ",bottom_data[i*dimdata+k+j]);
+    		 }
+    		 fprintf(fout, "%d ",(int)(bottom_label[i*dimlabel+j]));
          //outfile << bottom_data[i*dim+j] << " ";
        }
        fprintf(fout, "\n");
